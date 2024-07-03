@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:money_mate/constants/app_info.dart';
 import 'package:money_mate/constants/spacing.dart';
 import 'package:money_mate/constants/typography.dart';
+import 'package:money_mate/controllers/home_controller.dart';
 import 'package:money_mate/views/auth_screens/sign_in_screen/sign_in_screen.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -13,6 +15,9 @@ class SplashScreen extends StatelessWidget {
 
   changeScreen(context) {
     Future.delayed(Duration(seconds: 2), () {
+      var controller = Provider.of<HomeController>(context, listen: false);
+      controller.getAllExpense();
+
       GoRouter.of(context).goNamed(SignInScreen.id);
     });
   }

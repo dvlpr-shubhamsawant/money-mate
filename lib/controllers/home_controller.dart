@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:money_mate/constants/app_lists.dart';
-import 'package:money_mate/models/expense_data_model.dart';
 
 class HomeController extends ChangeNotifier {
   String selectedCategory = "Bill";
   DateTime selectedDate = DateTime.now();
-  List expensesList = AppLists.expeseList;
-  bool isExpenseLoading = false;
+  List expensesList = [];
+  String totalExpenseSpend = "0";
+  var myBox = Hive.box("ExpenseBox");
 
   // texteditingcontrollers
   TextEditingController dateController = TextEditingController();
   TextEditingController titleController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
   // setters
@@ -21,8 +20,8 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  set updateExpenseLoading(value) {
-    isExpenseLoading = value;
+  set updateTotalExpenseSpend(value) {
+    totalExpenseSpend = value;
     notifyListeners();
   }
 
@@ -52,21 +51,41 @@ class HomeController extends ChangeNotifier {
     priceController.clear();
     selectedCategory = "";
     selectedDate = DateTime.now();
+    dateController.clear();
   }
 
-  addExpense() {
-    updateExpenseLoading = true;
+  addExpense(data) async {
+    await myBox.add(data);
+    print(myBox.values);
+    getAllExpense();
+    clearTextEditingController();
+    notifyListeners();
+  }
 
-    expensesList.add(
-      ExpenseDataModel.fromJson({
-        "title": titleController.text,
-        "amount": priceController.text,
-        "category": selectedCategory,
-        "date": selectedDate,
-      }),
-    );
-    updateExpenseLoading = false;
+  getAllExpense() async {
+    expensesList = await myBox.keys.map((e) {
+      var res = myBox.get(e);
 
+      return {
+        'key': e,
+        'title': res['title'],
+        'category': res['category'],
+        'price': res['price'],
+        'date': res['date'],
+      };
+    }).toList();
+
+    notifyListeners();
+  }
+
+  Future<void> deleteExpense(key) async {
+    await myBox.delete(key);
+    getAllExpense();
+  }
+
+  Future<void> updateItem(key, updateData) async {
+    await myBox.put(key, updateData);
+    HomeController().getAllExpense();
     clearTextEditingController();
     notifyListeners();
   }

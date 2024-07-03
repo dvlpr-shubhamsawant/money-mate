@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_mate/views/auth_screens/sign_in_screen/sign_in_screen.dart';
 import 'package:money_mate/views/auth_screens/sign_up_screen/sign_up_screen.dart';
-import 'package:money_mate/views/category_screen/category_screen.dart';
+
 import 'package:money_mate/views/home_screen/home_screen.dart';
 import 'package:money_mate/views/shared_widget/navbar.dart';
 import 'package:money_mate/views/splash_screen/splash_screen.dart';
@@ -47,11 +47,6 @@ class AppRouter {
             name: HomeScreen.id,
             builder: (context, state) => HomeScreen(),
           ),
-          GoRoute(
-            path: '/categoryscreen',
-            name: CategoryScreen.id,
-            builder: (context, state) => CategoryScreen(),
-          ),
         ],
       )
     ],
@@ -64,8 +59,6 @@ int calculateScreenIndex(GoRouterState state) {
   if (location.startsWith('/homescreen')) {
     return 0;
   }
-  if (location.startsWith('/categoryscreen')) {
-    return 1;
-  }
+
   return -1;
 }

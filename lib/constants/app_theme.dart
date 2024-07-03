@@ -5,6 +5,7 @@ import 'package:money_mate/constants/typography.dart';
 
 class AppTheme {
   static ThemeData themeData = ThemeData(
+      appBarTheme: AppBarTheme(backgroundColor: AppColors.offWhitecolor),
       fontFamily: Typo.regular,
       scaffoldBackgroundColor: AppColors.offWhitecolor,
       floatingActionButtonTheme: FloatingActionButtonThemeData(

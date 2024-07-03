@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_mate/constants/app_router.dart';
 import 'package:money_mate/constants/app_theme.dart';
 import 'package:money_mate/controllers/auth_controller.dart';
 import 'package:money_mate/controllers/home_controller.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MoneyMate());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('ExpenseBox');
+  runApp(MoneyMate());
 }
 
 class MoneyMate extends StatelessWidget {
