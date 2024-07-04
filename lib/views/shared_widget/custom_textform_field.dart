@@ -8,8 +8,6 @@ TextFormField customTextformField({
   color,
 }) {
   return TextFormField(
-    // cursorColor: AppColo
-    // rs.orangeColor,
     cursorHeight: 20,
     cursorWidth: 1.3,
     decoration: InputDecoration(

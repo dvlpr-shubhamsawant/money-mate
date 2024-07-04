@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:money_mate/views/auth_screens/sign_in_screen/sign_in_screen.dart';
-import 'package:money_mate/views/auth_screens/sign_up_screen/sign_up_screen.dart';
 
 import 'package:money_mate/views/home_screen/home_screen.dart';
 import 'package:money_mate/views/shared_widget/navbar.dart';
@@ -18,18 +16,6 @@ class AppRouter {
         path: '/',
         name: SplashScreen.id,
         builder: (context, state) => SplashScreen(),
-      ),
-      GoRoute(
-        path: '/auth',
-        name: SignInScreen.id,
-        builder: (context, state) => SignInScreen(),
-        routes: [
-          GoRoute(
-            path: 'sign_up',
-            name: SignUpScreen.id,
-            builder: (context, state) => SignUpScreen(),
-          )
-        ],
       ),
       ShellRoute(
         navigatorKey: GlobalKey<NavigatorState>(),

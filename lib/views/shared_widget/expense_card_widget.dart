@@ -12,10 +12,7 @@ expenseShowCard(
     date,
     ontap,
     delete,
-    update
-
-    // ExpenseDataModel? model,
-    }) {
+    update}) {
   return GestureDetector(
     onTap: ontap,
     child: Container(

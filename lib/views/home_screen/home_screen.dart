@@ -6,14 +6,32 @@ import 'package:money_mate/constants/color_pallet.dart';
 import 'package:money_mate/constants/spacing.dart';
 import 'package:money_mate/constants/typography.dart';
 import 'package:money_mate/controllers/home_controller.dart';
-
+import 'package:money_mate/services/local_notifications.dart';
 import 'package:money_mate/views/shared_widget/expense_card_widget.dart';
 import 'package:money_mate/views/shared_widget/modal_bottom_sheet_text_field.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   static String id = "HomeScreen";
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    listenToNotification();
+  }
+
+  // listen to any notifications clicked or not
+  listenToNotification() {
+    print("listening to notification");
+    LocalNotifications.onClickNotification.stream.listen((event) {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +50,11 @@ class HomeScreen extends StatelessWidget {
             ),
             onPressed: () {
               homeController.getAllExpense();
+              LocalNotifications.showPeriodicNotification(
+                title: "Money Mate",
+                body: "App is Refresh",
+                payload: "Periodic Notification",
+              );
             },
           ),
           SizedBox(
@@ -39,63 +62,20 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await homeController.getAllExpense();
-        },
-        child: Container(
-          padding: Spacing.screenPadding,
-          width: double.infinity,
-          child: Consumer<HomeController>(builder: (context, controller, _) {
-            return SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+      body: Container(
+        padding: Spacing.screenPadding,
+        width: double.infinity,
+        child: Consumer<HomeController>(builder: (context, controller, _) {
+          return SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await homeController.getAllExpense();
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Spacing.heightBox(30),
-                  // balance and name card
-                  // Container(
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                  //   decoration: BoxDecoration(
-                  //       color: AppColors.darkGreyColor,
-                  //       borderRadius: BorderRadius.circular(12.r)),
-                  //   child: Row(
-                  //     // crossAxisAlignment: CrossAxisAlignment.start,
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(
-                  //         "LISHA THOMAS",
-                  //         style: TextStyle(
-                  //           color: AppColors.offWhitecolor,
-                  //           fontFamily: Typo.medium,
-                  //           fontSize: 16.sp,
-                  //         ),
-                  //       ),
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text(
-                  //             "Total Expense",
-                  //             style: TextStyle(
-                  //               fontSize: 12.sp,
-                  //               color: AppColors.offWhitecolor,
-                  //             ),
-                  //           ),
-                  //           Spacing.heightBox(4),
-                  //           Text(
-                  //             "Rs ${controller.totalExpenseSpend}",
-                  //             style: TextStyle(
-                  //               fontSize: 22.sp,
-                  //               color: AppColors.offWhitecolor,
-                  //               fontFamily: Typo.semiBold,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
 
                   // list of expenses
 
@@ -167,9 +147,9 @@ class HomeScreen extends StatelessWidget {
                       : Text("No Expense found"),
                 ],
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

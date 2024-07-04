@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:money_mate/services/local_notifications.dart';
 
 class HomeController extends ChangeNotifier {
   String selectedCategory = "Bill";
